@@ -7,8 +7,66 @@ declare var google: any;
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
+    readonly locations = [
+    {
+      position: new google.maps.LatLng(23.43, 90.26),//dhaka
+      type: "info",
+      location:"Dhaka"
+    },
+    {
+      position: new google.maps.LatLng(22.25,  89.35),//khulna
+      type: "info",
+      location:"Khulna"
+    },
+    {
+      position: new google.maps.LatLng(23.28, 91.10 ),//comilla
+      type: "info",
+      location:"Comilla"
+    },
+    {
+      position: new google.maps.LatLng(24.05, 91.00 ),//chittagong
+      type: "info",
+      location:"Chittagong"
+    },
+    {
+      position: new google.maps.LatLng(21.26, 91.59 ),//Cox's Bazar
+      type: "info",
+      location:"Cox's Bazar"
+    },
+    {
+      position: new google.maps.LatLng(25.33, 88.43 ),//Dinajpur
+      type: "info",
+      location:"Dinajpur"
 
+    },
+    {
+      position: new google.maps.LatLng(24.22, 88.39 ),//Rajshahi
+      type: "info",
+      location:"Rajshahi"
+
+    },
+    {
+      position: new google.maps.LatLng(24.54, 91.52 ),//Sylhet
+      type: "info",
+      location:"Sylhet"
+
+    },
+    {
+      position: new google.maps.LatLng(22.48, 91.10),//Noakhali / Maijdi
+      type: "info",
+      location:"Noakhali / Maijdi"
+
+    },
+    {
+      position: new google.maps.LatLng(23.10, 89.10 ),//Jessore
+      type: "info",
+      location:"Jessore"
+    },
+    
+  ];
   constructor() { }
+
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
@@ -17,36 +75,13 @@ export class MapComponent implements OnInit {
   }
 
   initMap(): void {
-    const locations = [
-      { lat: -31.56391, lng: 147.154312 },
-      { lat: -33.718234, lng: 150.363181 },
-      { lat: -33.727111, lng: 150.371124 },
-      { lat: -33.848588, lng: 151.209834 },
-      { lat: -33.851702, lng: 151.216968 },
-      { lat: -34.671264, lng: 150.863657 },
-      { lat: -35.304724, lng: 148.662905 },
-      { lat: -36.817685, lng: 175.699196 },
-      { lat: -36.828611, lng: 175.790222 },
-      { lat: -37.75, lng: 145.116667 },
-      { lat: -37.759859, lng: 145.128708 },
-      { lat: -37.765015, lng: 145.133858 },
-      { lat: -37.770104, lng: 145.143299 },
-      { lat: -37.7737, lng: 145.145187 },
-      { lat: -37.774785, lng: 145.137978 },
-      { lat: -37.819616, lng: 144.968119 },
-      { lat: -38.330766, lng: 144.695692 },
-      { lat: -39.927193, lng: 175.053218 },
-      { lat: -41.330162, lng: 174.865694 },
-      { lat: -42.734358, lng: 147.439506 },
-      { lat: -42.734358, lng: 147.501315 },
-      { lat: -42.735258, lng: 147.438 },
-      { lat: -43.999792, lng: 170.463352 },
-    ];
+    
+    
     const map = new google.maps.Map(
       document.getElementById("map") as HTMLElement,
       {
-        zoom: 3,
-        center: { lat: -28.024, lng: 140.887 },
+        zoom: 9,
+        center: { lat: 23.43, lng: 90.26 },
       }
     );
   
@@ -54,16 +89,20 @@ export class MapComponent implements OnInit {
       content: "",
       disableAutoPan: true,
     });
-  
-    // Create an array of alphabetical characters used to label the markers.
-    const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  
+
+    const icons: Record<string, { icon: string }> = {
+      info: {
+        icon: "https://i.ibb.co/tY1gDD5/icons8-location-48.png",
+      },
+    };
+     
     // Add some markers to the map.
-    const markers = locations.map((position, i) => {
-      const label = labels[i % labels.length];
+    const markers = this.locations.map((position, i) => {
+      const label = this.locations[i].location;
       const marker = new google.maps.Marker({
-        position,
-        label,
+        position: this.locations[i].position,
+        icon: icons[this.locations[i].type].icon,
+        map: map,
       });
   
       // markers can only be keyboard focusable when they have click listeners
@@ -75,12 +114,9 @@ export class MapComponent implements OnInit {
   
       return marker;
     });
-  
+    const imagePath = "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m";
     // Add a marker clusterer to manage the markers.
-    new MarkerClusterer( map, markers);
+    new MarkerClusterer( map, markers, {imagePath: imagePath});
   }
-  
-  
-
 
 }
